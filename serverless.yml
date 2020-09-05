@@ -10,6 +10,19 @@ provider:
   profile: playground
   region: eu-west-1
 
+  iamRoleStatements:
+    - Effect: Allow
+      Action: dynamodb:scan
+      Resource: !GetAtt RestaurantsTable.Arn
+    - Effect: Allow
+      Action: execute-api:Invoke
+      Resource: arn:aws:execute-api:#{AWS::Region}:#{AWS::AccountId}:#{ApiGatewayRestApi}/${self:provider.stage}/GET/restaurants
+
+
+plugins:
+  - serverless-export-env
+  - serverless-pseudo-parameters
+
 functions:
   get-index:
     handler: functions/get-index.handler
@@ -17,6 +30,9 @@ functions:
       - http:
           path: /
           method: get
+    environment:
+      restaurants_api: https://#{ApiGatewayRestApi}.execute-api.#{AWS::Region}.amazonaws.com/${self:provider.stage}/restaurants
+
 
   get-restaurants:
     handler: functions/get-restaurants.handler
@@ -24,6 +40,7 @@ functions:
       - http:
           path: /restaurants/
           method: get
+          authorizer: aws_iam
     environment:
       restaurants_table: !Ref RestaurantsTable
 
