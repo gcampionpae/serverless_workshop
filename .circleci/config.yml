@@ -11,6 +11,7 @@ jobs:
       - node/with-cache:
           steps:
             - run: npm ci
+            - run: npm run set-credentials
             - run: npm run test-ci # run our integration tests
   deploy:
     docker:
