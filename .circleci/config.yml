@@ -12,7 +12,7 @@ jobs:
           steps:
             - run: npm ci
             - run: npm run set-credentials
-            - run: npm run test-ci # run our integration tests
+            - run: npm run test # run our integration tests
   deploy:
     docker:
       - image: circleci/node
@@ -20,6 +20,7 @@ jobs:
       - checkout
       - node/with-cache:
           steps:
+            - run: npm run set-credentials
             - run: npm run sls -- deploy
   acceptance-test:
     docker:
@@ -28,7 +29,8 @@ jobs:
       - checkout
       - node/with-cache:
           steps:
-            - run: npm run acceptance-ci
+            - run: npm run set-credentials
+            - run: npm run acceptance
 
 workflows:
   version: 2
