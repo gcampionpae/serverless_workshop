@@ -7,7 +7,7 @@ custom:
 provider:
   name: aws
   runtime: nodejs12.x
-  profile: workshop
+  profile: ${opt:profile, 'workshop'}
   region: eu-west-1
 
   iamRoleStatements:
