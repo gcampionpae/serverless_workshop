@@ -11,6 +11,8 @@ jobs:
       - node/with-cache:
           steps:
             - run: npm ci
+            - run: echo $AWS_ACCESS_KEY_ID
+            - run: sls config credentials --provider aws --key $AWS_ACCESS_KEY_ID --secret $AWS_SECRET_ACCESS_KEY --profile workshop
             - run: npm run test-ci # run our integration tests
   deploy:
     docker:
