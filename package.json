@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "sls": "serverless",
     "dotEnv": "sls export-env",
     "test": "npm run dotEnv && cross-env AWS_PROFILE=workshop AWS_REGION=eu-west-1 TEST_MODE=handler jest",
     "acceptance": "npm run dotEnv && cross-env AWS_PROFILE=workshop AWS_REGION=eu-west-1 TEST_MODE=http jest"
