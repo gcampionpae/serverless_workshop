@@ -81,7 +81,7 @@ resources:
       Type: AWS::SSM::Parameter
       Properties:
         Type: String
-        Name: /${self:service}/${self:provider.stage}/serviceUrl
+        Name: /${self:service}/${self:provider.stage}/serviceUrl${self:provider.stage}
         Value:
           Fn::Join:
             - ""

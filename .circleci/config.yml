@@ -12,6 +12,7 @@ jobs:
           steps:
             - run: npm ci
             - run: npm run test # run our integration tests
+
   deploy:
     docker:
       - image: circleci/node
@@ -21,6 +22,7 @@ jobs:
           steps:
             - run: npm run set-credentials
             - run: npm run sls -- deploy -s e2e-test-<< pipeline.git.branch >>
+
   acceptance-test:
     docker:
       - image: circleci/node
