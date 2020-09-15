@@ -43,7 +43,7 @@ jobs:
             - run: npm run sls -- remove -s e2e-test-<< pipeline.git.branch >>
 
 workflows:
-  version: 2
+  version: 3
   dev:
     jobs:
       - integration-test
@@ -53,3 +53,6 @@ workflows:
       - acceptance-test:
           requires:
             - deploy
+      - test-env-teardown:
+          requires:
+            - acceptance-test
