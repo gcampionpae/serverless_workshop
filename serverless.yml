@@ -28,7 +28,7 @@ provider:
         - arn:aws:ssm:#{AWS::Region}:#{AWS::AccountId}:parameter/${self:service}/${self:provider.stage}/search-restaurants/secretString
     - Effect: Allow
       Action: kms:Decrypt
-      Resource: ${ssm:/dev/kmsArn}
+      Resource: ${ssm:/dev/kmsArn-${self:provider.stage}}
 
 plugins:
   - serverless-export-env
@@ -93,7 +93,7 @@ resources:
       Type: AWS::SSM::Parameter
       Properties:
         Type: String
-        Name: /dev/kmsArn
+        Name: /dev/kmsArn-${self:provider.stage}
         Value: arn:aws:kms:eu-west-1:528644380448:key/60246e3b-c54f-42d9-8413-62b72d4db7ad
 
 
