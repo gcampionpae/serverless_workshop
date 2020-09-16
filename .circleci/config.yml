@@ -30,7 +30,7 @@ jobs:
       - checkout
       - node/with-cache:
           steps:
-            - run: npm run acceptance-cli
+            - run: npm run acceptance-ci
 
   test-env-teardown:
     docker:
