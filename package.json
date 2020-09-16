@@ -7,8 +7,10 @@
     "sls": "serverless",
     "dotEnv": "sls export-env",
     "set-credentials": "cd tests && sls config credentials --provider aws --key $AWS_ACCESS_KEY_ID --secret $AWS_SECRET_ACCESS_KEY --profile workshop && cd ..",
-    "test": "npm run set-credentials && npm run dotEnv && cross-env AWS_PROFILE=workshop AWS_REGION=eu-west-1 TEST_MODE=handler jest",
-    "acceptance": "npm run set-credentials && npm run dotEnv && cross-env AWS_PROFILE=workshop AWS_REGION=eu-west-1 TEST_MODE=http jest"
+    "test": "npm run dotEnv && cross-env AWS_PROFILE=workshop AWS_REGION=eu-west-1 TEST_MODE=handler jest",
+    "acceptance": "npm run dotEnv && cross-env AWS_PROFILE=workshop AWS_REGION=eu-west-1 TEST_MODE=http jest",
+    "test-ci": "npm run set-credentials && npm run dotEnv && cross-env AWS_PROFILE=workshop AWS_REGION=eu-west-1 TEST_MODE=handler jest",
+    "acceptance-ci": "npm run set-credentials && npm run dotEnv && cross-env AWS_PROFILE=workshop AWS_REGION=eu-west-1 TEST_MODE=http jest"
   },
   "keywords": [],
   "author": "",
