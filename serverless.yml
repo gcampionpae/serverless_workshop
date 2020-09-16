@@ -9,6 +9,8 @@ provider:
   runtime: nodejs12.x
   profile: 'workshop'
   region: eu-west-1
+  stage: ${opt:stage, 'dev'}
+
   environment:
     serviceName: ${self:service}
     stage: ${self:provider.stage}
@@ -32,6 +34,9 @@ provider:
     - Effect: Allow
       Action: events:PutEvents
       Resource: "*"
+    - Effect: Allow
+      Action: sns:Publish
+      Resource: !Ref RestaurantNotificationTopic
 
 plugins:
   - serverless-export-env
@@ -53,6 +58,26 @@ functions:
             - .execute-api.${self:provider.region}.amazonaws.com/${self:provider.stage}/restaurants
       cognito_user_pool_id: !Ref CognitoUserPool
       cognito_client_id: !Ref WebCognitoUserPoolClient
+      orders_api:
+        Fn::Join:
+          - ""
+          - - https://
+            - !Ref ApiGatewayRestApi
+            - .execute-api.${self:provider.region}.amazonaws.com/${self:provider.stage}/orders
+
+  notify-restaurant:
+    handler: functions/notify-restaurant.handler
+    events:
+      - eventBridge:
+          eventBus: arn:aws:events:#{AWS::Region}:#{AWS::AccountId}:event-bus/order_events_${self:provider.stage}
+          pattern:
+            source:
+              - big-mouth
+            detail-type:
+              - order_placed
+    environment:
+      bus_name: !Ref EventBus
+      restaurant_notification_topic: !Ref RestaurantNotificationTopic
 
   place-order:
     handler: functions/place-order.handler
@@ -92,6 +117,9 @@ functions:
 
 resources:
   Resources:
+    RestaurantNotificationTopic:
+      Type: AWS::SNS::Topic
+
     EventBus:
       Type: AWS::Events::EventBus
       Properties:
@@ -177,6 +205,12 @@ resources:
         PreventUserExistenceErrors: ENABLED
 
   Outputs:
+    RestaurantNotificationTopicName:
+      Value: !GetAtt RestaurantNotificationTopic.TopicName
+
+    RestaurantNotificationTopicArn:
+      Value: !Ref RestaurantNotificationTopic
+
     EventBusName:
       Value: !Ref EventBus
 
