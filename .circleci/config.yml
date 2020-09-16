@@ -21,7 +21,7 @@ jobs:
       - node/with-cache:
           steps:
             - run: npm run set-credentials
-            - run: npm run sls -- deploy -s e2e-test-<< pipeline.git.branch >>
+            - run: npm run sls -- deploy -s e2e-<< pipeline.git.branch >>
 
   acceptance-test:
     docker:
